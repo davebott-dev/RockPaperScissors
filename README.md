@@ -1,1 +1,2 @@
 # RockPaperScissors
+This is my first Javascript project wit The Odin Project. I will be coding the classic game of rock-paper-scissors from scratch. The user will be able to play against a computer in the webpage's console.
