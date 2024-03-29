@@ -9,108 +9,134 @@
         <h1>David Bottenberg's Rock Paper Scissors Game</h1>
         <p>Play Here</p>
         <script>
-            
-            function getPlayerChoice() {
-             let playerChoice = prompt("Choose rock, paper, or scissors? ");
-                if (playerChoice === "rock") {
-                    playerChoice = "rock"
-                    console.log("player selects rock");
-                } else if (playerChoice === "paper") {
-                    playerChoice = "paper"
-                    console.log("player selects paper")
-                } else if (playerChoice === "scissors") {
-                    playerChoice = "scissors"
-                    console.log("player selects scissors")
-                } else {
-                    console.log("please select a valid input")
-                }
-                return playerChoice
-            }
-           function getComputerChoice() {
-             let computerChoice = Math.floor(Math.random()*3+1);
-            if (computerChoice ===1) {
-            computerChoice = "rock";
-           console.log("computer selects rock");
-           } else if (computerChoice===2) {
-            computerChoice= 'paper';
-            console.log("computer selects paper");
-           } else {
-            computerChoice = "scissors";
-            console.log("computer selects scissors")
-           }
-           return computerChoice;
-        }
+            const btnRock = document.querySelector("#rock");
+            const btnPaper = document.querySelector("#paper");
+            const btnScissors = document.querySelector("#scissors");
+            const resultElement = document.querySelector(".results");
         
-
-           function playRound(playerSelection,computerSelection) {
-
-            if (playerSelection === computerSelection) {
-                return "It's a draw!";
-            } else if (playerSelection === "paper" && computerSelection === "rock"){
-                return "You win!";
-            } else if (playerSelection === "scissors" && computerSelection === "rock") {
-                return "You lose!";
-            } else if (playerSelection === "rock" && computerSelection ==="paper")  {
-                return "You lose!";
-            } else if (playerSelection==="rock" && computerSelection==="scissors") {
-                return "You win!";
-            } else if (playerSelection === "paper" && computerSelection==="scissors") {
-                return "You lose!";
-            } else if (playerSelection === "scissors" && computerSelection ==="paper") {
-                return "You win!";
-            }
-            }
-
-            let pscore = 0;
-            let cscore =0;
-
-
-           function playGame(x) {
-            for(let i=0;i<x;i++) {
-             
-            
-                const playerSelection = getPlayerChoice();
-                const computerSelection = getComputerChoice();
-
-                console.log(playRound(playerSelection,computerSelection));
-                winner = playRound(playerSelection,computerSelection);
-
-                if (winner === "You win!") {
-                    pscore++
-                } else if (winner === "You lose!") {
-                    cscore++
-                } else {
-                    pscore + 0;
-                }
-
-
-                console.log("Player Score: " + pscore);
-                console.log("Computer Score: " +cscore);
-
-                if (pscore > cscore) {
-                    console.log("Player Wins!")
-                } else if (cscore >pscore) {
-                    console.log("Computer Wins!")
-                }else {
-                    console.log("It's a draw!")
-                }
-
-                
-
-            }
-            }
-           
-
-        playGame(5);
-    
-    
-       
+            let pScore = 0;
+            let cScore = 0;
+            let totalRounds = 0;
+            let tieGame = 0;
         
-
-   
         
-
-
-        </script>
+            function displayResults() {
+              resultElement.innerHTML = "";
+        
+              let firstPElement = createPElement("Game Over!");
+              let secondPElement = createPElement(`Player Score: ${pScore}`);
+              let thirdPElement = createPElement(`Computer Score: ${cScore}`);
+              let fourthPElement = createPElement(`Tie Game: ${tieGame}`);
+        
+              resultElement.appendChild(firstPElement);
+              resultElement.appendChild(secondPElement);
+              resultElement.appendChild(thirdPElement);
+              resultElement.appendChild(fourthPElement);
+        
+        
+              let fifthPElement = createPElement(``);
+              if (pScore > cScore) {
+                fifthPElement.textContent = "Congratulations. You Win!";
+              } else if (cScore > pScore) {
+                fifthPElement.textContent = "Sorry. You Lose!";
+              } else {
+                fifthPElement.textContent="It's a TIE!";
+              }
+              resultElement.appendChild(fifthPElement);
+            }
+        
+        
+            function createPElement(text) {
+              const pElement = document.createElement("p");
+              pElement.textContent = text;
+              return pElement;
+            }
+        
+            function displayResult(pElement) {
+              resultElement.innerHTML = "";
+              resultElement.appendChild(pElement);
+            }
+        
+            function resetRoundsAndScores() {
+              pScore = 0;
+              cScore = 0;
+              totalRounds = 0;
+              tieGame = 0;
+            }
+        
+            function getComputerChoice() {
+              const choices = ["rock", "paper", "scissors"];
+              let computerChoice = choices[Math.floor(Math.random() * 3)]
+              if (computerChoice === "rock") {
+                computerChoice = "rock";
+                console.log("Computer selected rock")
+              } else if (computerChoice === "paper") {
+                computerChoice = "paper";
+                console.log("Computer selected paper")
+              } else if (computerChoice === "scissors") {
+                computerChoice = "scissors";
+                console.log("Computer selected scissors")
+              }
+              return computerChoice;
+            }
+        
+            function playRound(playerSelection, computerSelection) {
+              totalRounds++;
+        
+              const pAction = playerSelection;
+              const cAction = computerSelection;
+        
+              let result;
+              if (pAction === cAction) {
+                tieGame++;
+                result = createPElement("it's a draw!");
+              } else if (pAction === "rock" && cAction === "paper") {
+                cScore++;
+                result = createPElement("You lose!");
+              } else if (pAction === "rock" && cAction === "scissors") {
+                pScore++;
+                result = createPElement("You win!");
+              } else if (pAction === "paper" && cAction === "rock") {
+                pScore++;
+                result = createPElement("You win!");
+              } else if (pAction === "paper" && cAction === "scissors") {
+                cScore++;
+                result = createPElement("You lose!");
+              } else if (pAction === "scissors" && cAction === "rock") {
+                cScore++;
+                result = createPElement("You lose!");
+              } else if (pAction === "scissors" && cAction === "paper") {
+                pScore++;
+                result = createPElement("You win!");
+              }
+        
+            displayResult(result);
+        
+        
+            if (totalRounds ===5) {
+              displayResults();
+              resetRoundsAndScores();
+            }
+            }
+        
+        
+            btnRock.addEventListener("click", () => {
+              console.log("Player selected rock");
+              playRound("rock", getComputerChoice());
+            });
+        
+        
+            btnPaper.addEventListener("click", () => {
+              console.log("Player selected paper");
+              playRound("paper", getComputerChoice());
+            });
+        
+            btnScissors.addEventListener("click", () => {
+              console.log("Player selected scissors");
+              playRound("scissors", getComputerChoice());
+        
+            });
+        
+          </script>
     </body>
 </html>
